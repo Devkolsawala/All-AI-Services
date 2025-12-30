@@ -1,0 +1,9 @@
+{
+  "name": "Copy of Gemini Omni-Suite",
+  "description": "A comprehensive AI dashboard showcasing the full spectrum of Gemini capabilities, including image and video generation, live audio conversations, spatial grounding, and advanced reasoning.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

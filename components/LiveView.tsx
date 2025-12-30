@@ -48,11 +48,11 @@ const LiveView: React.FC = () => {
           onmessage: async (message: LiveServerMessage) => {
             if (message.serverContent?.outputTranscription) {
               const text = message.serverContent.outputTranscription.text;
-              setTranscription(prev => [...prev.slice(-4), `AI: ${text}`]);
+              setTranscription(prev => [...prev.slice(-9), `AI: ${text}`]);
             }
             if (message.serverContent?.inputTranscription) {
               const text = message.serverContent.inputTranscription.text;
-              setTranscription(prev => [...prev.slice(-4), `You: ${text}`]);
+              setTranscription(prev => [...prev.slice(-9), `You: ${text}`]);
             }
 
             const base64Audio = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
@@ -126,9 +126,12 @@ const LiveView: React.FC = () => {
         </div>
 
         <div className="relative">
-          <div className={`w-48 h-48 mx-auto rounded-full border-4 flex items-center justify-center transition-all duration-500 ${
-            isActive ? 'border-indigo-500 shadow-[0_0_50px_rgba(79,70,229,0.3)] bg-slate-900' : 'border-slate-800 bg-slate-900/50'
-          }`}>
+          <div 
+            title={isActive ? "Active voice stream" : "Microphone inactive"}
+            className={`w-48 h-48 mx-auto rounded-full border-4 flex items-center justify-center transition-all duration-500 ${
+              isActive ? 'border-indigo-500 shadow-[0_0_50px_rgba(79,70,229,0.3)] bg-slate-900' : 'border-slate-800 bg-slate-900/50'
+            }`}
+          >
             {isActive ? (
               <div className="flex gap-1 items-end h-16">
                 {[...Array(5)].map((_, i) => (
@@ -159,7 +162,7 @@ const LiveView: React.FC = () => {
           </div>
         </div>
 
-        <div className="min-h-[120px] bg-slate-900/40 rounded-2xl p-6 text-left border border-slate-800/50">
+        <div className="min-h-[120px] bg-slate-900/40 rounded-2xl p-6 text-left border border-slate-800/50 shadow-inner">
           <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Live Transcription</h3>
           <div className="space-y-2">
             {transcription.length === 0 ? (
@@ -176,6 +179,7 @@ const LiveView: React.FC = () => {
 
         <button
           onClick={isActive ? stopSession : startSession}
+          title={isActive ? "Terminate current session" : "Initialize new voice session"}
           className={`px-12 py-4 rounded-2xl font-bold text-lg transition-all transform active:scale-95 ${
             isActive 
               ? 'bg-red-500/10 text-red-500 border border-red-500/50 hover:bg-red-500 hover:text-white' 

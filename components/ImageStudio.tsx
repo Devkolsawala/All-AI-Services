@@ -90,12 +90,14 @@ const ImageStudio: React.FC = () => {
         <div className="flex bg-slate-900/50 backdrop-blur-md rounded-2xl p-1.5 border border-white/5 ring-1 ring-white/5">
           <button 
             onClick={() => { setMode('generate'); setGeneratedImageUrl(null); }}
+            title="Switch to Text-to-Image Generation"
             className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${mode === 'generate' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
           >
             Create
           </button>
           <button 
             onClick={() => { setMode('edit'); setGeneratedImageUrl(null); }}
+            title="Switch to AI-Powered Image Editing"
             className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${mode === 'edit' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
           >
             Refine
@@ -109,11 +111,18 @@ const ImageStudio: React.FC = () => {
             {mode === 'edit' && (
               <div className="space-y-4">
                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Source Reference</label>
-                <div className="relative group aspect-square rounded-3xl bg-slate-950/80 border border-white/5 overflow-hidden flex items-center justify-center ring-1 ring-white/5 transition-all hover:ring-indigo-500/30">
+                <div 
+                  className="relative group aspect-square rounded-3xl bg-slate-950/80 border border-white/5 overflow-hidden flex items-center justify-center ring-1 ring-white/5 transition-all hover:ring-indigo-500/30"
+                  title="Click to upload or drag image here"
+                >
                   {uploadImage ? (
                     <>
                       <img src={uploadImage} alt="Upload" className="w-full h-full object-cover" />
-                      <button onClick={() => setUploadImage(null)} className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 transition-all border border-white/10">
+                      <button 
+                        onClick={() => setUploadImage(null)} 
+                        title="Remove current image"
+                        className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 transition-all border border-white/10"
+                      >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
                       </button>
                     </>
@@ -122,7 +131,7 @@ const ImageStudio: React.FC = () => {
                       <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center mb-4 border border-white/5 group-hover/upload:border-indigo-500/30 transition-all">
                         <svg className="w-8 h-8 text-slate-600 group-hover/upload:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                       </div>
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select Base Image</span>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Base Image</span>
                       <input type="file" className="hidden" accept="image/*" onChange={onFileChange} />
                     </label>
                   )}
@@ -149,6 +158,7 @@ const ImageStudio: React.FC = () => {
                       <button 
                         key={ratio}
                         onClick={() => setConfig({...config, aspectRatio: ratio as any})}
+                        title={`Set output aspect ratio to ${ratio}`}
                         className={`py-2 rounded-xl text-[10px] font-bold transition-all border ${config.aspectRatio === ratio ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-950/40 border-white/5 text-slate-500 hover:text-slate-300'}`}
                       >
                         {ratio}
@@ -162,6 +172,7 @@ const ImageStudio: React.FC = () => {
             <button 
               onClick={mode === 'generate' ? handleGenerate : handleEdit}
               disabled={isProcessing || !prompt.trim() || (mode === 'edit' && !uploadImage)}
+              title={mode === 'generate' ? "Render image from text prompt" : "Apply AI modifications to existing image"}
               className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold py-5 rounded-[1.5rem] transition-all shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 group active:scale-95"
             >
               {isProcessing ? (
@@ -201,6 +212,7 @@ const ImageStudio: React.FC = () => {
                   <a 
                     href={generatedImageUrl} 
                     download="gemini-visual.png"
+                    title="Download generated media"
                     className="p-4 bg-slate-900/80 backdrop-blur-xl hover:bg-indigo-600 text-white rounded-2xl transition-all border border-white/10 shadow-2xl"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
@@ -214,7 +226,7 @@ const ImageStudio: React.FC = () => {
                 </div>
                 <div className="space-y-2">
                    <h3 className="text-white font-bold text-lg tracking-tight uppercase tracking-[0.1em]">Awaiting Creation</h3>
-                   <p className="text-slate-500 text-[11px] max-w-[240px] mx-auto font-medium leading-relaxed uppercase tracking-widest">Provide parameters to generate a new high-fidelity visual entity</p>
+                   <p className="text-slate-500 text-[11px] max-w-[240px] mx-auto font-medium leading-relaxed uppercase tracking-widest text-center">Provide parameters to generate a new high-fidelity visual entity</p>
                 </div>
               </div>
             )}

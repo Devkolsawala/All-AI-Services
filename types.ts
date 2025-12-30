@@ -1,6 +1,5 @@
 
 
-
 export enum ToolType {
   CHAT = 'CHAT',
   LIVE = 'LIVE',
@@ -10,6 +9,8 @@ export enum ToolType {
   ANALYSIS = 'ANALYSIS',
   FAST_AI = 'FAST_AI'
 }
+
+export type Theme = 'light' | 'dark';
 
 export interface Message {
   id: string;
@@ -27,7 +28,8 @@ export interface GenerationConfig {
 
 declare global {
   interface Window {
-    // Add missing webkitAudioContext type for Safari support
     webkitAudioContext: typeof AudioContext;
+    // Fix: Match the existing global AIStudio type declaration to resolve conflicts.
+    aistudio: AIStudio;
   }
 }
